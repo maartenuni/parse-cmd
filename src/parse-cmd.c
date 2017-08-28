@@ -16,6 +16,10 @@
  * Inc. , 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA 
  */
 
+/**
+ * \file parse-cmd.c
+ */
+
 #if defined(_MSC_VER)
 
 // disable some VisualStudio warnings in order to make
@@ -23,7 +27,7 @@
 
 /*Try to make visual studio stop nagging about POSIX functions.*/
 #define _CRT_NONSTDC_NO_DEPRECATE
-/*although sscanf can be unsafe when used well it is allright*/
+/*although sscanf can be unsafe when used well it is alright*/
 #define _CRT_SECURE_NO_WARNINGS
 
 #endif
@@ -35,15 +39,20 @@
 
 #include "parse-cmd.h"
 
+/**
+ * \internal
+ * Stores the encountered options and arguments.
+ */
 struct option_context {
-    const char*     program_name;
-    cmd_option**    options;
-    const char**    args;
-    int             n_options;
-    int             options_capacity;
-    int             n_args;
-    int             arguments_capacity;
+    const char*     program_name;       ///< Stores the name of the program.
+    cmd_option**    options;            ///< The options specified.
+    const char**    args;               ///< The arguments specified.
+    int             n_options;          ///< Number of options specified.
+    int             options_capacity;   ///< Capacity of options storage.
+    int             n_args;             ///< Number of arguments specified.
+    int             arguments_capacity; ///< Capacity of the arguments.
 };
+
 
 void option_context_free(option_context* context)
 {
@@ -168,11 +177,17 @@ static int find_short_option(char opt,
     return ret;
 }
 
-/*
+/**
+ * \internal
  * When an option is specified to the program, it makes itself
  * know to the option_context with this function.
+ *
+ * \param[in,out] options the option structure to and argument to.
+ * \param[in]     argument the argument to store.
+ *
+ * returns OPTION_OK when successful.
  */
-int options_add_parsed_argument(
+static int options_add_parsed_argument(
         option_context* options,
         const char*     argument
         )
@@ -202,14 +217,20 @@ int options_add_parsed_argument(
     return ret;
 }
 
-/*
+/**
+ * \internal
  * When an option is specified to the program, it makes itself
- * know to the option_context with this function. 
+ * know to the option_context with this function.
+ *
+ * \param [in, out] options the option context to add this option to.
+ * \param [in]      option the option to add.
+ * \param [in]      The string value of its options.
  */
-int options_add_parsed_option(option_context* options,
-                              cmd_option* option,
-                              const char* value
-                              )
+static int
+options_add_parsed_option(option_context* options,
+                          cmd_option* option,
+                          const char* value
+                          )
 {
     int ret;
     /* Increase array size. */
@@ -245,7 +266,7 @@ int options_add_parsed_option(option_context* options,
         return OPTION_PARSE_ERROR;
     }
 
-    // Parses the option value if neccessary. Or specifies a one
+    // Parses the option value if necessary. Or specifies a one
     // when a flag is found in the integer value.
     switch (option->option_type) {
     case OPT_STR:
@@ -303,7 +324,7 @@ int options_parse(option_context**  ppoptions,
         return OPTION_INVALID_ARGUMENT;
     }
 
-    // Allocate the neccessary memory.
+    // Allocate the necessary memory.
     copy = malloc(nargs * sizeof(char**));
     *ppoptions = malloc(sizeof(option_context));
     if (!copy || !(*ppoptions)) {
@@ -339,7 +360,7 @@ int options_parse(option_context**  ppoptions,
         if (is_long_opt(copy[i]) && long_opt_contains_value(copy[i])) {
             n = find_long_option(copy[i], predef_opts, nargs);
             if (n < 0) {
-                fprintf(stderr, "Unknow option \"%s\"", copy[i]);
+                fprintf(stderr, "Unknown option \"%s\"", copy[i]);
                 ret = OPTION_UNKNOWN;
                 break;
             }
@@ -357,7 +378,7 @@ int options_parse(option_context**  ppoptions,
 
             n = find_long_option(copy[i], predef_opts, nargs);
             if (n < 0) {
-                fprintf(stderr, "Unknow option \"%s\"", copy[i]);
+                fprintf(stderr, "Unknown option \"%s\"", copy[i]);
                 ret = OPTION_UNKNOWN;
                 break;
             }
@@ -432,7 +453,7 @@ int options_parse(option_context**  ppoptions,
         }
     }
 
-    // Error parsing options clean the rubish.
+    // Error parsing options clean the rubbish.
     if (ret != OPTION_OK) {
         free(copy);
         option_context_free(options);
