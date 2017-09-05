@@ -29,7 +29,7 @@ set (LIB_PARSE_CMD_VERSION_STRING
     "\"libparse-cmd-${LIB_PARSE_CMD_VERSION_MAJOR}.\""
     "\"${LIB_PARSE_CMD_VERSION_MAJOR}.${LIB_PARSE_CMD_VERSION_MICRO}\""
     )
-
+set (LIB_PARSE_CMD_INSTALL_HEADER_DIR "include/parse-cmd-${LIB_PARSE_CMD_VERSION_MAJOR}")
 
 #set names for the targets
 set (PARSE_CMD_SHARED_LIB
@@ -59,5 +59,15 @@ else()
    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -pedantic -std=c99")
 endif()
 
-add_subdirectory(src)
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Maarten Duijndam")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Helps parsing command line options.")
+set(CPACK_PACKAGE_DESCRIPTION         "Helps parsing command line options.")
+option(BUILD_DPKG "Whether or not add support for creating debian packages" TRUE)
 
+if(BUILD_DPKG)
+    set(CPACK_GENERATOR "DEB")
+endif()
+
+include (CPack)
+
+add_subdirectory(src)

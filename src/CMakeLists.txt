@@ -39,6 +39,10 @@ add_library(${PARSE_CMD_STATIC_LIB}
             ${LIB_PARSE_CMD_HEADERS}
             )
 
+# Set include path (for e.g. export header)
+include_directories(${PARSE_CMD_SHARED_LIB} ${CMAKE_CURRENT_BINARY_DIR})
+include_directories(${PARSE_CMD_STATIC_LIB} ${CMAKE_CURRENT_BINARY_DIR})
+
 #Make linking work for dynamic and shared libs
 set_target_properties(${PARSE_CMD_SHARED_LIB} PROPERTIES
     COMPILE_FLAGS -DBUILD_LIB_PARSE_CMD_SHARED
@@ -55,5 +59,11 @@ set_property(TARGET ${PARSE_CMD_SHARED_LIB} PROPERTY C_STANDARD_REQUIRED ON)
 set_property(TARGET ${PARSE_CMD_STATIC_LIB} PROPERTY C_STANDARD_REQUIRED ON)
 
 #Make linking work for dynamic and shared libs
-generate_export_header(${PARSE_CMD_STATIC_LIB} BASE_NAME libparse-cmd)
+generate_export_header(${PARSE_CMD_STATIC_LIB} BASE_NAME parse-cmd)
 
+install (TARGETS ${PARSE_CMD_SHARED_LIB} LIBRARY DESTINATION lib)
+install (TARGETS ${PARSE_CMD_STATIC_LIB} ARCHIVE DESTINATION lib)
+install (FILES parse-cmd.h DESTINATION "${LIB_PARSE_CMD_INSTALL_HEADER_DIR}")
+install (FILES "${CMAKE_CURRENT_BINARY_DIR}/parse-cmd_export.h"
+         DESTINATION "${LIB_PARSE_CMD_INSTALL_HEADER_DIR}"
+         )

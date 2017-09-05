@@ -23,8 +23,10 @@
 #ifndef PARSE_CMD_H
 #define PARSE_CMD_H
 
+#include "parse-cmd_export.h"
+
 #ifdef __cplusplus
-extern "c" {
+extern "C" {
 #endif
 
 /**
@@ -39,7 +41,7 @@ enum OPTION_VALUE_TYPES {
 
 /**
  * Possible outcomes of an operation. OPTION_OK tells that the operation
- * was successfull, otherwise it indicates an error.
+ * was successful, otherwise it indicates an error.
  */
 enum OPTION_RET_VAL {
     OPTION_OK = 0,           ///< Operation was successful
@@ -97,7 +99,8 @@ typedef struct option_context option_context;
  *
  * \returns OPTION_OK when successful.
  */
-int options_parse(
+PARSE_CMD_EXPORT int
+options_parse(
         option_context** options,
         int argc,
         char** argv,
@@ -108,14 +111,16 @@ int options_parse(
 /**
  * Frees an option context and its allocated resources.
  */
-void option_context_free(option_context* options);
+PARSE_CMD_EXPORT void
+option_context_free(option_context* options);
 
 /**
  * Finds and returns an options specified at the command line.
  *
  * \returns A pointer to the option or NULL if it wasn't found.
  */
-cmd_option* option_context_find_option(option_context* option,
+PARSE_CMD_EXPORT cmd_option*
+option_context_find_option(option_context* option,
                                        const char* name);
 
 /**
@@ -124,8 +129,10 @@ cmd_option* option_context_find_option(option_context* option,
  * \param[in] options the option context.
  * \param[in] name the name of the long option without "--" prefix.
  * 
+ * \Returns non zero value when option was found.
  */
-int option_context_have_option(
+PARSE_CMD_EXPORT int
+option_context_have_option(
         option_context* options,
         const char*     name
         );
@@ -140,7 +147,8 @@ int option_context_have_option(
  * \returns OPTION_OK when successful or another OPTION_RET_VAL when
  *          it is not successful.
  */
-int option_context_str_value(
+PARSE_CMD_EXPORT int
+option_context_str_value(
         option_context* options,
         const char*     opt_name,
         const char**    opt_value
@@ -156,7 +164,8 @@ int option_context_str_value(
  * \returns OPTION_OK when successful or another OPTION_RET_VAL when
  *          it is not successful.
  */
-int option_context_int_value(
+PARSE_CMD_EXPORT int
+option_context_int_value(
         option_context* options,
         const char*     opt_name,
         int*            opt_value
@@ -173,7 +182,8 @@ int option_context_int_value(
  * \returns OPTION_OK when successful or another OPTION_RET_VAL when
  *          it is not successful.
  */
-int option_context_float_value(
+PARSE_CMD_EXPORT int
+option_context_float_value(
         option_context* options,
         const char*     opt_name,
         double*         opt_value

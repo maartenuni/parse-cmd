@@ -117,6 +117,7 @@ static int find_equals(const char* str)
             ret = (int)(p - str);
             break;
         }
+        p++;
     }
     return ret;
 }
@@ -455,10 +456,10 @@ int options_parse(option_context**  ppoptions,
 
     // Error parsing options clean the rubbish.
     if (ret != OPTION_OK) {
-        free(copy);
         option_context_free(options);
         *ppoptions = NULL;
     }
+    free(copy);
 
     return ret;
 }
