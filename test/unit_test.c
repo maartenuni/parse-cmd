@@ -44,7 +44,7 @@ void failure_test()
     option_context* options = (void*) 0x3141592654;
     int argc, ret;
 
-    char* args1[] = {
+    const char* args1[] = {
         "failure_test1"
     };
     argc = sizeof(args1)/sizeof(args1[0]);
@@ -65,7 +65,7 @@ void failure_test()
     options = NULL;
 
     // oops x-coor must be int.
-    char* args2[] = {
+    const char* args2[] = {
         "failure_test2",
         "-x", "Hello, World!"
     };
@@ -74,7 +74,7 @@ void failure_test()
     CU_ASSERT_EQUAL(ret, OPTION_PARSE_ERROR);
     CU_ASSERT_PTR_NULL(options);
     
-    char* args3[] = {
+    const char* args3[] = {
         "failure_test3",
         "-x", "3.1415" //its a float not an int.
     };
@@ -105,7 +105,7 @@ void string_test()
     char* compiler = "gnu C compiler";
     char* linker   = "ld";
 
-    char* args_combined[] = {
+    const char* args_combined[] = {
         "string-test",
         "-ppreprocessor",
         "--compiler", compiler,
@@ -167,7 +167,7 @@ void floating_point_test()
     const double avogadro  = 6.022e23;
     const double eps = 0.000001;
 
-    char* args_short[] = {
+    const char* args_short[] = {
         "float-test",
         "-p", "3.141592654",
         "-e", "2.7182818",
@@ -198,7 +198,7 @@ void floating_point_test()
     option_context_free(options);
     options = NULL;
     
-    char* args_long[] = {
+    const char* args_long[] = {
         "float-test",
         "--pi",         "3.141592654",
         "--e",          "2.7182818",
@@ -241,7 +241,7 @@ void integer_test()
 {
     option_context* options = NULL;
     int argc, ret, val;
-    char* args_short[] = {
+    const char* args_short[] = {
         "integer-test",
         "-o", "1",
         "-t", "2",
@@ -271,7 +271,7 @@ void integer_test()
     option_context_free(options);
     options = NULL;
     
-    char* args_long[] = {
+    const char* args_long[] = {
         "integer-test",
         "--one", "1",
         "--two", "2",
@@ -304,7 +304,7 @@ void integer_combined_test()
 {
     option_context* options = NULL;
     int argc, ret, val;
-    char* args_short[] = {
+    const char* args_short[] = {
         "integer-test",
         "-o1",
         "-t=2",
@@ -334,7 +334,7 @@ void integer_combined_test()
     option_context_free(options);
     options = NULL;
     
-    char* args_long[] = {
+    const char* args_long[] = {
         "integer-test",
         "--one=1",
         "--two=2",
@@ -442,7 +442,7 @@ cmd_option prog_opts[] = {
     {'s', "silent" , OPT_FLAG, {0}}
 };
 
-int parse_opts(int argc, char** argv) {
+int parse_opts(int argc, const char* const* argv) {
 
     int ret;
     option_context* context = NULL;
@@ -479,14 +479,14 @@ int parse_opts(int argc, char** argv) {
 
 int main(int argc, char** argv) {
     
+    parse_opts(argc, argv);
+
     if(CU_initialize_registry() != CUE_SUCCESS) {
         fprintf(stderr, "Unable to initialze the unittesting frame work\n");
         return EXIT_FAILURE;
     }
-
+    
     add_suites();
-
-    parse_opts(argc, argv);
 
     if(g_verbose)
         CU_basic_set_mode(CU_BRM_VERBOSE);

@@ -70,7 +70,7 @@ typedef union option_value {
  */
 typedef struct cmd_option {
     char            short_opt;  ///< The short option variant.
-    char*           long_opt;   ///< The long option variant.
+    const char*     long_opt;   ///< The long option variant.
     int             option_type;///< This determines how the option
                                 //  argument should be interpreted.
     option_value    value;      ///< The actual value specified.
@@ -104,7 +104,7 @@ PARSE_CMD_EXPORT int
 options_parse(
         option_context** options,
         int argc,
-        char** argv,
+        const char* const* argv,
         cmd_option* predef_opts,
         unsigned nargs
         );

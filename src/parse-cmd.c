@@ -312,7 +312,7 @@ options_add_parsed_option(option_context* options,
 
 int options_parse(option_context**  ppoptions,
                   int               argc,
-                  char**            argv,
+                  const char* const* argv,
                   cmd_option*       predef_opts,
                   unsigned          nargs
                   )
