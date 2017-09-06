@@ -20,11 +20,11 @@ cmake_minimum_required(VERSION 2.8)
 ## Create libraries
 
 set (LIB_PARSE_CMD_SOURCES
-    parse-cmd.c
+    parse_cmd.c
     )
 
 set (LIB_PARSE_CMD_HEADERS
-    parse-cmd.h
+    parse_cmd.h
     )
 
 add_library(${PARSE_CMD_SHARED_LIB}
@@ -63,7 +63,7 @@ generate_export_header(${PARSE_CMD_STATIC_LIB} BASE_NAME parse_cmd)
 
 install (TARGETS ${PARSE_CMD_SHARED_LIB} LIBRARY DESTINATION lib)
 install (TARGETS ${PARSE_CMD_STATIC_LIB} ARCHIVE DESTINATION lib)
-install (FILES parse-cmd.h DESTINATION "${LIB_PARSE_CMD_INSTALL_HEADER_DIR}")
-install (FILES "${CMAKE_CURRENT_BINARY_DIR}/parse-cmd_export.h"
+install (FILES parse_cmd.h DESTINATION "${LIB_PARSE_CMD_INSTALL_HEADER_DIR}")
+install (FILES "${CMAKE_CURRENT_BINARY_DIR}/parse_cmd_export.h"
          DESTINATION "${LIB_PARSE_CMD_INSTALL_HEADER_DIR}"
          )

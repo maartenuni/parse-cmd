@@ -17,7 +17,7 @@
  */
 
 /**
- * \file parse-cmd.h
+ * \file parse_cmd.h
  */
 
 #ifndef PARSE_CMD_H

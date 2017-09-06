@@ -17,7 +17,7 @@
  */
 
 /**
- * \file parse-cmd.c
+ * \file parse_cmd.c
  */
 
 #if defined(_MSC_VER)
@@ -37,7 +37,7 @@
 #include <string.h>
 #include <assert.h>
 
-#include "parse-cmd.h"
+#include "parse_cmd.h"
 
 /**
  * Stores the encountered options and arguments.

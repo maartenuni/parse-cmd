@@ -20,7 +20,7 @@
 #include <stdlib.h>
 #include <CUnit/CUnit.h>
 #include <CUnit/Basic.h>
-#include "../src/parse-cmd.h"
+#include "../src/parse_cmd.h"
 
 int g_verbose = 0;
 int g_silent = 0;
