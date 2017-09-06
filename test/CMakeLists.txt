@@ -30,7 +30,6 @@ if(BUILD_UNIT_TEST)
         )
 
     set(UNIT_TEST_HEADERS 
-        suites.h
         )
 
     add_executable(${UNIT_TEST} ${UNIT_TEST_SOURCES} ${UNIT_TEST_HEADERS})
