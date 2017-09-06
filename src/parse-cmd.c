@@ -40,8 +40,8 @@
 #include "parse-cmd.h"
 
 /**
- * \internal
  * Stores the encountered options and arguments.
+ * \internal
  */
 struct option_context {
     const char*     program_name;       ///< Stores the name of the program.

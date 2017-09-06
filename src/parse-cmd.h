@@ -130,7 +130,7 @@ option_context_find_option(option_context* option,
  * \param[in] options the option context.
  * \param[in] name the name of the long option without "--" prefix.
  * 
- * \Returns non zero value when option was found.
+ * \return non zero value when option was found.
  */
 PARSE_CMD_EXPORT int
 option_context_have_option(
