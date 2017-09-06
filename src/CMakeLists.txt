@@ -15,7 +15,7 @@
 # along with libparse-cmd.  If not, see <http://www.gnu.org/licenses/>
 #
 
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 2.8)
 
 ## Create libraries
 
@@ -59,7 +59,7 @@ set_property(TARGET ${PARSE_CMD_SHARED_LIB} PROPERTY C_STANDARD_REQUIRED ON)
 set_property(TARGET ${PARSE_CMD_STATIC_LIB} PROPERTY C_STANDARD_REQUIRED ON)
 
 #Make linking work for dynamic and shared libs
-generate_export_header(${PARSE_CMD_STATIC_LIB} BASE_NAME parse-cmd)
+generate_export_header(${PARSE_CMD_STATIC_LIB} BASE_NAME parse_cmd)
 
 install (TARGETS ${PARSE_CMD_SHARED_LIB} LIBRARY DESTINATION lib)
 install (TARGETS ${PARSE_CMD_STATIC_LIB} ARCHIVE DESTINATION lib)

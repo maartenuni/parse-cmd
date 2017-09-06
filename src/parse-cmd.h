@@ -23,7 +23,7 @@
 #ifndef PARSE_CMD_H
 #define PARSE_CMD_H
 
-#include "parse-cmd_export.h"
+#include "parse_cmd_export.h"
 
 #ifdef __cplusplus
 extern "C" {
