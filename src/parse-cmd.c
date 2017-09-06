@@ -104,7 +104,6 @@ static int options_add_name(option_context* options, const char* name)
     return OPTION_OK;
 }
 
-
 /*
  * Utility to find an equals sign in a string.
  */
@@ -112,7 +111,7 @@ static int find_equals(const char* str)
 {
     const char* p = str;
     int ret = -1;
-    while (p != '\0') {
+    while (*p != '\0') {
         if (*p == '=') {
             ret = (int)(p - str);
             break;
@@ -130,6 +129,8 @@ static int long_opt_contains_value(const char* str)
 
 /*
  * Looks between options whether opt is specified
+ *
+ * Note make sure not to include the leading "--" of an option.
  *
  * @ return a value >= 0 when it is found and -1 when it isn't found.
  */
@@ -248,7 +249,7 @@ options_add_parsed_option(option_context* options,
         else {
             options->options = realloc(
                 options->options,
-                options->n_options * sizeof(cmd_option*)
+                options->options_capacity * sizeof(cmd_option*)
                 );
             if (!options->options)
                 return OPTION_OUT_OF_MEM;
@@ -274,13 +275,16 @@ options_add_parsed_option(option_context* options,
         option->value.string_value = value;
         break;
     case OPT_INT:
-        ret = sscanf(value, "%d", &intval);
-        if (ret != 1) {
-            fprintf(stderr, "option --%s -%c: expected int argument\n",
-                    option->long_opt,
-                    option->short_opt
-                    );
-            return OPTION_PARSE_ERROR;
+        {
+            char trailing_garbage[2];
+            ret = sscanf(value, "%d%1s", &intval, trailing_garbage);
+            if (ret != 1) {
+                fprintf(stderr, "option --%s -%c: expected int argument\n",
+                        option->long_opt,
+                        option->short_opt
+                        );
+                return OPTION_PARSE_ERROR;
+            }
         }
         option->value.integer_value = intval;
         break;
@@ -313,12 +317,14 @@ int options_parse(option_context**  ppoptions,
                   unsigned          nargs
                   )
 {
-    //int found;
     int i, n, ret =  OPTION_OK;
-    //int nopts_removed = 0;
-    //int length = argc;
-    const char**    copy    = NULL;
     option_context* options = NULL;
+
+    // Check whether arguments are specified
+    if (argc < 1 || !argv) {
+        fprintf(stderr, "argc and argv should reflect a program name\n");
+        return OPTION_INVALID_ARGUMENT;
+    }
 
     if (*ppoptions) {
         fprintf(stderr, "parse_options: *options != NULL\n");
@@ -326,60 +332,54 @@ int options_parse(option_context**  ppoptions,
     }
 
     // Allocate the necessary memory.
-    copy = malloc(nargs * sizeof(char**));
     *ppoptions = malloc(sizeof(option_context));
-    if (!copy || !(*ppoptions)) {
-        free(copy);
+    if (!(*ppoptions)) {
         free(*ppoptions);
         fprintf(stderr, "parse_options: out of memory\n");
         return OPTION_OUT_OF_MEM;
     }
+
     options = *ppoptions;
     memset(options, 0, sizeof(option_context));
 
-    // Shallow initialize the copy of the command_line arguments
-    for (i = 0; i < argc; ++i)
-        copy[i] = argv[i];
+    options_add_name(options, argv[0]);
 
-    for (i = 0; i < argc; i++) {
+    for (i = 1; i < argc; i++) {
 
         const char *opt_value;
         cmd_option* option;
-
-        // Obtain program name
-        if (i == 0) {
-            ret = options_add_name(options, copy[0]);
-            if (ret != OPTION_OK)
-                break;
-            continue;
-        }
 
         /* We typically first test whether it is an long or short option
          * Then we test whether we know it. If it isn't an option. It
          * is an argument to the program.
          */
-        if (is_long_opt(copy[i]) && long_opt_contains_value(copy[i])) {
-            n = find_long_option(copy[i], predef_opts, nargs);
+        if (is_long_opt(argv[i]) && long_opt_contains_value(argv[i])) {
+            const char* opt = argv[i];
+            opt += 2; // skip leading "--"
+            n = find_long_option(opt, predef_opts, nargs);
             if (n < 0) {
-                fprintf(stderr, "Unknown option \"%s\"", copy[i]);
+                fprintf(stderr, "Unknown option \"%s\"\n", argv[i]);
                 ret = OPTION_UNKNOWN;
                 break;
             }
             option = &predef_opts[n];
-            opt_value = copy[find_equals(copy[i]) + 1];
+            opt_value = argv[i];
+            opt_value += find_equals(opt_value) + 1;
             ret = options_add_parsed_option(options, option, opt_value);
             if (ret)
                 break;
         }
-        else if (is_long_opt(copy[i])) {
+        else if (is_long_opt(argv[i])) {
+            // skip "--"
+            const char* opt_start = argv[i] + 2;
             if (i + 1 < argc)
-                opt_value = copy[i + 1];
+                opt_value = argv[i + 1];
             else
                 opt_value = NULL;
 
-            n = find_long_option(copy[i], predef_opts, nargs);
+            n = find_long_option(opt_start, predef_opts, nargs);
             if (n < 0) {
-                fprintf(stderr, "Unknown option \"%s\"", copy[i]);
+                fprintf(stderr, "Unknown option \"%s\"", argv[i]);
                 ret = OPTION_UNKNOWN;
                 break;
             }
@@ -393,9 +393,9 @@ int options_parse(option_context**  ppoptions,
                 ret = options_add_parsed_option(options, option, NULL);
             }
         } 
-        else if (is_short_opt(copy[i])) {
+        else if (is_short_opt(argv[i])) {
             // skip '-'
-            const char* opt_start = copy[i] + 1;
+            const char* opt_start = argv[i] + 1;
             while (*opt_start != '\0' && *opt_start != '=') {
                 char c = *opt_start;
                 n = find_short_option(c, predef_opts, nargs);
@@ -413,7 +413,7 @@ int options_parse(option_context**  ppoptions,
                     if (*opt_value == '\0') {
                         i++;
                         if (i< argc)
-                            opt_value = copy[i];
+                            opt_value = argv[i];
                         else{
                             fprintf(stderr,
                                     "Option -%c expected an argument\n",
@@ -448,7 +448,7 @@ int options_parse(option_context**  ppoptions,
                 break;
         }
         else { // is an argument not an option with optional value
-            ret = options_add_parsed_argument(options, copy[i]);
+            ret = options_add_parsed_argument(options, argv[i]);
             if (ret != OPTION_OK)
                 break;
         }
@@ -459,7 +459,6 @@ int options_parse(option_context**  ppoptions,
         option_context_free(options);
         *ppoptions = NULL;
     }
-    free(copy);
 
     return ret;
 }

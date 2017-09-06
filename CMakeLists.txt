@@ -71,3 +71,5 @@ endif()
 include (CPack)
 
 add_subdirectory(src)
+add_subdirectory(test)
+

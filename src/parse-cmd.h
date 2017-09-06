@@ -47,6 +47,7 @@ enum OPTION_RET_VAL {
     OPTION_OK = 0,           ///< Operation was successful
     OPTION_OUT_OF_MEM,       ///< Operation didn't succeed due memory shortage.
     OPTION_WRONG_OPTION_TYPE,///< Unable to understand option value.
+    OPTION_WITHOUT_VALUE,    ///< Value specified by a flag.
     OPTION_PARSE_ERROR,      ///< Unable to parse the command line arguments
     OPTION_INVALID_ARGUMENT, ///< An invalid argument to a function was specified.
     OPTION_UNKNOWN,          ///< An unknown option encountered.
