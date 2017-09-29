@@ -314,7 +314,7 @@ int options_parse(option_context**  ppoptions,
                   int               argc,
                   const char* const* argv,
                   cmd_option*       predef_opts,
-                  unsigned          nargs
+                  unsigned          n_args
                   )
 {
     int i, n, ret =  OPTION_OK;
@@ -356,7 +356,7 @@ int options_parse(option_context**  ppoptions,
         if (is_long_opt(argv[i]) && long_opt_contains_value(argv[i])) {
             const char* opt = argv[i];
             opt += 2; // skip leading "--"
-            n = find_long_option(opt, predef_opts, nargs);
+            n = find_long_option(opt, predef_opts, n_args);
             if (n < 0) {
                 fprintf(stderr, "Unknown option \"%s\"\n", argv[i]);
                 ret = OPTION_UNKNOWN;
@@ -377,7 +377,7 @@ int options_parse(option_context**  ppoptions,
             else
                 opt_value = NULL;
 
-            n = find_long_option(opt_start, predef_opts, nargs);
+            n = find_long_option(opt_start, predef_opts, n_args);
             if (n < 0) {
                 fprintf(stderr, "Unknown option \"%s\"", argv[i]);
                 ret = OPTION_UNKNOWN;
@@ -398,7 +398,7 @@ int options_parse(option_context**  ppoptions,
             const char* opt_start = argv[i] + 1;
             while (*opt_start != '\0' && *opt_start != '=') {
                 char c = *opt_start;
-                n = find_short_option(c, predef_opts, nargs);
+                n = find_short_option(c, predef_opts, n_args);
                 if (n < 0) {
                     fprintf(stderr, "Unknown option -%c\n", c);
                     ret = OPTION_UNKNOWN;
@@ -558,4 +558,21 @@ int option_context_have_option(option_context* context,
     assert(context && name);
     return option_context_find_option(context, name) != NULL;
 }
+
+int option_context_nargs(const option_context* context)
+{
+    assert(context);
+    return context->n_args;
+}
+
+const char*
+option_context_get_argument(const option_context* context, int nth)
+{
+    assert(context);
+    if (nth >= context->n_args)
+        return NULL;
+
+    return context->args[nth];
+}
+
 
