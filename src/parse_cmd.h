@@ -190,6 +190,24 @@ option_context_float_value(
         double*         opt_value
         );
 
+/**
+ * Get the number of non option arguments
+ */
+
+PARSE_CMD_EXPORT int
+option_context_nargs(const option_context* options);
+
+/**
+ * Get the nth argument that was specified.
+ *
+ * @param [in] options an initialized option context
+ * @param [in] nth retrieve the nth_argument
+ *
+ * \Returns a pointer to an argument or NULL when it is not available.
+ */
+PARSE_CMD_EXPORT const char*
+option_context_get_argument(const option_context* options, int nth);
+
 
 #ifdef __cplusplus
 }
