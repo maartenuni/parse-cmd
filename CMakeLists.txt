@@ -20,6 +20,7 @@ project (parse_cmd C CXX)
 
 include (CheckIncludeFiles)
 include (GenerateExportHeader)
+#include (ConfigureFile)
 
 #set versioning variables
 set (LIB_PARSE_CMD_VERSION_MAJOR 0)
@@ -29,7 +30,9 @@ set (LIB_PARSE_CMD_VERSION_STRING
     "\"libparse_cmd_${LIB_PARSE_CMD_VERSION_MAJOR}.\""
     "\"${LIB_PARSE_CMD_VERSION_MAJOR}.${LIB_PARSE_CMD_VERSION_MICRO}\""
     )
-set (LIB_PARSE_CMD_INSTALL_HEADER_DIR "include/parse_cmd_${LIB_PARSE_CMD_VERSION_MAJOR}")
+set (LIB_PARSE_CMD_INSTALL_HEADER_DIR
+    "include/parse_cmd_${LIB_PARSE_CMD_VERSION_MAJOR}_${LIB_PARSE_CMD_VERSION_MINOR}"
+    )
 
 #set names for the targets
 set (PARSE_CMD_SHARED_LIB
@@ -62,14 +65,24 @@ endif()
 set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Maarten Duijndam")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Helps parsing command line options.")
 set(CPACK_PACKAGE_DESCRIPTION         "Helps parsing command line options.")
-option(BUILD_DPKG "Whether or not add support for creating debian packages" TRUE)
 
+option(BUILD_DPKG "Whether or not add support for creating debian packages" TRUE)
 if(BUILD_DPKG)
     set(CPACK_GENERATOR "DEB")
 endif()
 
-include (CPack)
 
 add_subdirectory(src)
 add_subdirectory(test)
 
+include (CPack)
+option(CREATE_PC_FILE "Add support for pkg-config" TRUE)
+if (CREATE_PC_FILE)
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/parse_cmd.pc.in
+                   ${CMAKE_CURRENT_BINARY_DIR}/parse_cmd.pc
+                   @ONLY
+                   )
+    install (FILES "${CMAKE_CURRENT_BINARY_DIR}/parse_cmd.pc"
+             DESTINATION "${CMAKE_INSTALL_PREFIX}/share/pkgconfig"
+             )
+endif()
