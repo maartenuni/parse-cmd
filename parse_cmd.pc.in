@@ -6,7 +6,7 @@ includedir=@INSTALL_INCLUDE_DIR@
 
 Name: parse-cmd
 Description: utility to parse commandline arguments/options
-Version: @LIB_PARSE_CMD_VERSION_STRING@
+Version: @VERSION@
 
 Requires:
 Libs: -l@PARSE_CMD_SHARED_LIB@

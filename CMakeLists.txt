@@ -25,9 +25,10 @@ include (GenerateExportHeader)
 set (LIB_PARSE_CMD_VERSION_MAJOR 0)
 set (LIB_PARSE_CMD_VERSION_MINOR 0)
 set (LIB_PARSE_CMD_VERSION_MICRO 0)
+set (VERSION "${LIB_PARSE_CMD_VERSION_MAJOR}.${LIB_PARSE_CMD_VERSION_MINOR}.${LIB_PARSE_CMD_VERSION_MICRO}")
+set (LIB_PARSE_CMD_VERSION "parse_cmd_${VERSION}")
 set (LIB_PARSE_CMD_VERSION_STRING
-    "\"libparse_cmd_${LIB_PARSE_CMD_VERSION_MAJOR}.\""
-    "\"${LIB_PARSE_CMD_VERSION_MAJOR}.${LIB_PARSE_CMD_VERSION_MICRO}\""
+    "\"${LIB_PARSE_CMD_VERSION}\""
     )
 set (LIB_PARSE_CMD_INSTALL_HEADER_DIR
     "include/parse_cmd_${LIB_PARSE_CMD_VERSION_MAJOR}_${LIB_PARSE_CMD_VERSION_MINOR}"
@@ -61,7 +62,7 @@ else()
    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -pedantic -std=c99")
 endif()
 
-set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Maarten Duijndam")
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER   "Maarten Duijndam")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Helps parsing command line options.")
 set(CPACK_PACKAGE_DESCRIPTION         "Helps parsing command line options.")
 
@@ -70,6 +71,7 @@ if(BUILD_DPKG)
     set(CPACK_GENERATOR "DEB")
 endif()
 
+set(INSTALL_PKGCONFIG_DIR "${CMAKE_INSTALL_PREFIX}/share/pkgconfig" CACHE PATH "Installation directory for pkgconfig (.pc) files")
 
 add_subdirectory(src)
 add_subdirectory(test)
@@ -82,6 +84,6 @@ if (CREATE_PC_FILE)
                    @ONLY
                    )
     install (FILES "${CMAKE_CURRENT_BINARY_DIR}/parse_cmd.pc"
-             DESTINATION "${CMAKE_INSTALL_PREFIX}/share/pkgconfig"
+             DESTINATION "share/pkgconfig"
              )
 endif()
