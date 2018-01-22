@@ -20,7 +20,6 @@ project (parse_cmd C CXX)
 
 include (CheckIncludeFiles)
 include (GenerateExportHeader)
-#include (ConfigureFile)
 
 #set versioning variables
 set (LIB_PARSE_CMD_VERSION_MAJOR 0)
