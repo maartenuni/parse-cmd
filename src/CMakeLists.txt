@@ -19,24 +19,24 @@ cmake_minimum_required(VERSION 2.8)
 
 ## Create libraries
 
-set (LIB_PARSE_CMD_SOURCES
+set (PARSE_CMD_SOURCES
     parse_cmd.c
     )
 
-set (LIB_PARSE_CMD_HEADERS
+set (PARSE_CMD_HEADERS
     parse_cmd.h
     )
 
 add_library(${PARSE_CMD_SHARED_LIB}
             SHARED
-            ${LIB_PARSE_CMD_SOURCES}
-            ${LIB_PARSE_CMD_HEADERS}
+            ${PARSE_CMD_SOURCES}
+            ${PARSE_CMD_HEADERS}
             )
 
 add_library(${PARSE_CMD_STATIC_LIB}
             STATIC
-            ${LIB_PARSE_CMD_SOURCES}
-            ${LIB_PARSE_CMD_HEADERS}
+            ${PARSE_CMD_SOURCES}
+            ${PARSE_CMD_HEADERS}
             )
 
 # Set include path (for e.g. export header)
@@ -45,10 +45,10 @@ include_directories(${PARSE_CMD_STATIC_LIB} ${CMAKE_CURRENT_BINARY_DIR})
 
 #Make linking work for dynamic and shared libs
 set_target_properties(${PARSE_CMD_SHARED_LIB} PROPERTIES
-    COMPILE_FLAGS -DBUILD_LIB_PARSE_CMD_SHARED
+    COMPILE_FLAGS -DBUILD_PARSE_CMD_SHARED
     )
 set_target_properties(${PARSE_CMD_STATIC_LIB} PROPERTIES
-    COMPILE_FLAGS -DLIB_PARSE_CMD_STATIC_DEFINE
+    COMPILE_FLAGS -DPARSE_CMD_STATIC_DEFINE
     )
 
 #enable compiling with C99 standard
@@ -63,7 +63,7 @@ generate_export_header(${PARSE_CMD_STATIC_LIB} BASE_NAME parse_cmd)
 
 install (TARGETS ${PARSE_CMD_SHARED_LIB} LIBRARY DESTINATION lib)
 install (TARGETS ${PARSE_CMD_STATIC_LIB} ARCHIVE DESTINATION lib)
-install (FILES parse_cmd.h DESTINATION "${LIB_PARSE_CMD_INSTALL_HEADER_DIR}")
+install (FILES parse_cmd.h DESTINATION "${PARSE_CMD_INSTALL_HEADER_DIR}")
 install (FILES "${CMAKE_CURRENT_BINARY_DIR}/parse_cmd_export.h"
-         DESTINATION "${LIB_PARSE_CMD_INSTALL_HEADER_DIR}"
+         DESTINATION "${PARSE_CMD_INSTALL_HEADER_DIR}"
          )

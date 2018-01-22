@@ -22,24 +22,24 @@ include (CheckIncludeFiles)
 include (GenerateExportHeader)
 
 #set versioning variables
-set (LIB_PARSE_CMD_VERSION_MAJOR 0)
-set (LIB_PARSE_CMD_VERSION_MINOR 0)
-set (LIB_PARSE_CMD_VERSION_MICRO 0)
-set (VERSION "${LIB_PARSE_CMD_VERSION_MAJOR}.${LIB_PARSE_CMD_VERSION_MINOR}.${LIB_PARSE_CMD_VERSION_MICRO}")
-set (LIB_PARSE_CMD_VERSION "parse_cmd_${VERSION}")
-set (LIB_PARSE_CMD_VERSION_STRING
-    "\"${LIB_PARSE_CMD_VERSION}\""
+set (PARSE_CMD_VERSION_MAJOR 0)
+set (PARSE_CMD_VERSION_MINOR 0)
+set (PARSE_CMD_VERSION_MICRO 0)
+set (VERSION "${PARSE_CMD_VERSION_MAJOR}.${PARSE_CMD_VERSION_MINOR}.${PARSE_CMD_VERSION_MICRO}")
+set (PARSE_CMD_VERSION "parse_cmd_${VERSION}")
+set (PARSE_CMD_VERSION_STRING
+    "\"${PARSE_CMD_VERSION}\""
     )
-set (LIB_PARSE_CMD_INSTALL_HEADER_DIR
-    "include/parse_cmd_${LIB_PARSE_CMD_VERSION_MAJOR}_${LIB_PARSE_CMD_VERSION_MINOR}"
+set (PARSE_CMD_INSTALL_HEADER_DIR
+    "include/parse_cmd_${PARSE_CMD_VERSION_MAJOR}_${PARSE_CMD_VERSION_MINOR}"
     )
 
 #set names for the targets
 set (PARSE_CMD_SHARED_LIB
-        parse_cmd_${LIB_PARSE_CMD_VERSION_MAJOR}_${LIB_PARSE_CMD_VERSION_MINOR}
+        parse_cmd_${PARSE_CMD_VERSION_MAJOR}_${PARSE_CMD_VERSION_MINOR}
         )
 set (PARSE_CMD_STATIC_LIB
-        parse_cmd_${LIB_PARSE_CMD_VERSION_MAJOR}_${LIB_PARSE_CMD_VERSION_MINOR}_static
+        parse_cmd_${PARSE_CMD_VERSION_MAJOR}_${PARSE_CMD_VERSION_MINOR}_static
         )
 
 #Check for expected headers
@@ -65,6 +65,10 @@ endif()
 set(CPACK_DEBIAN_PACKAGE_MAINTAINER   "Maarten Duijndam")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Helps parsing command line options.")
 set(CPACK_PACKAGE_DESCRIPTION         "Helps parsing command line options.")
+set(CPACK_PACKAGE_NAME                "parse_cmd")
+set(CPACK_PACKAGE_VERSION_MAJOR      ${PARSE_CMD_VERSION_MAJOR})
+set(CPACK_PACKAGE_VERSION_MINOR      ${PARSE_CMD_VERSION_MINOR})
+set(CPACK_PACKAGE_VERSION_PATCH      ${PARSE_CMD_VERSION_MICRO})
 
 option(BUILD_DPKG "Whether or not add support for creating debian packages" TRUE)
 if(BUILD_DPKG)
