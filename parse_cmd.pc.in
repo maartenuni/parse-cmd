@@ -1,13 +1,15 @@
 prefix=@CMAKE_INSTALL_PREFIX@
-exec_prefix=@CMAKE_INSTALL_PREFIX@
-libdir=@INSTALL_LIB_DIR@
-sharedlibdir=@INSTALL_LIB_DIR@
-includedir=@INSTALL_INCLUDE_DIR@
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+sharedlibdir=${exec_prefix}/lib
+includedir=${prefix}/include
+version_major=@PARSE_CMD_VERSION_MAJOR@
+version_minor=@PARSE_CMD_VERSION_MINOR@
 
 Name: parse-cmd
 Description: utility to parse commandline arguments/options
 Version: @VERSION@
-
+#doesn't require anything at the moment
 Requires:
-Libs: -l@PARSE_CMD_SHARED_LIB@
-CFlags:
+Libs: -L${libdir} -l@PARSE_CMD_SHARED_LIB@
+Cflags: -I${includedir}/parse_cmd_${version_major}_${version_minor}
