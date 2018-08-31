@@ -364,6 +364,66 @@ void integer_combined_test()
     options = NULL;
 }
 
+void short_help_test()
+{
+    option_context* options = NULL;
+    int argc, ret;
+    char* help = NULL;
+    cmd_option predef_opts[] = {
+        {'i', "int",        OPT_INT,    },
+        {'f', "float",      OPT_FLOAT,  },
+        {'s', "string",     OPT_STR,    },
+        {'b', "bool",       OPT_FLAG,   },
+        {0  , "nint",       OPT_INT,    },
+        {0  , "nfloat",     OPT_FLOAT,  },
+        {0  , "nstring",    OPT_STR,    },
+        {0  , "nbool",      OPT_FLAG,   },
+    };
+
+    size_t opt_size = sizeof(predef_opts)/sizeof(predef_opts[0]);
+    
+    const char* expected_output = "Usage short-help-test: "
+            "[-i|--int <int>] "
+            "[-f|--float <float>] "
+            "[-s|--string <string>] "
+            "[-b|--bool] "
+            "[--nint <int>] "
+            "[--nfloat <float>] "
+            "[--nstring <string>] "
+            "[--nbool]"
+            ;
+
+    const char* argv[] = {
+        "short-help-test",
+    };
+
+    argc = sizeof(argv)/sizeof(argv[0]);
+
+    ret = options_parse(
+            &options, argc, argv, predef_opts, opt_size
+            );
+
+    CU_ASSERT(ret == OPTION_OK);
+    if (ret != OPTION_OK) {
+        return;
+    }
+
+    option_context_short_help(options, &help);
+    CU_ASSERT_STRING_EQUAL(help, expected_output);
+    if (strcmp(help, expected_output) != 0) {
+        fprintf(stderr, "Got     : \"%s\"\n"
+                        "expected: \"%s\"\n",
+                        help,
+                        expected_output
+                        );
+    }
+
+    free(help);
+
+    option_context_free(options);
+    options = NULL;
+}
+
 
 /**
  * returns an error code of the CUnit framework
@@ -424,6 +484,17 @@ int add_suites()
     
     test = CU_add_test(
             suite, "expected-failure", failure_test 
+            );
+    if (!test) {
+        fprintf(stderr,
+                "unable to create test suite: %s\n",
+                CU_get_error_msg()
+               );
+        return CU_get_error();
+    }
+    
+    test = CU_add_test(
+            suite, "short-help-test", short_help_test
             );
     if (!test) {
         fprintf(stderr,

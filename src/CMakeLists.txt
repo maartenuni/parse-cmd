@@ -21,6 +21,7 @@ cmake_minimum_required(VERSION 2.8)
 
 set (PARSE_CMD_SOURCES
     parse_cmd.c
+    parse_cmd_help.c
     )
 
 set (PARSE_CMD_HEADERS
