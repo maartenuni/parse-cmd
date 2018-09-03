@@ -16,6 +16,8 @@
  * Inc. , 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA 
  */
 
+#include<stdlib.h>
+
 /**
  * \file text_buffer.h
  *
@@ -23,8 +25,6 @@
  * This file export a text_buffer that is a helper to build strings of
  * which the length is yet unknown.
  */
-
-#include<stdlib.h>
 
 /**
  * A text buffer is used to build some strings.
@@ -44,7 +44,7 @@ typedef struct text_buffer {
 } text_buffer_t;
 
 /**
- * A typedef to a pointe to text_buffer_tr
+ * A typedef to a pointer to text_buffer_t
  * \internal
  */
 typedef text_buffer_t* text_buffer_ptr;
@@ -89,7 +89,7 @@ text_buffer_append(text_buffer_ptr buf, const char* txt);
  * remain null terminated.
  *
  * @param buf   the buffer you want to append to
- * @param txt   a character to append to the text inside the buffer.
+ * @param c     a character to append to the text inside the buffer.
  *
  * \returns 0 when successful
  * \internal
