@@ -22,10 +22,12 @@ cmake_minimum_required(VERSION 2.8)
 set (PARSE_CMD_SOURCES
     parse_cmd.c
     parse_cmd_help.c
+    text_buffer.c
     )
 
 set (PARSE_CMD_HEADERS
     parse_cmd.h
+    text_buffer.h
     )
 
 add_library(${PARSE_CMD_SHARED_LIB}
