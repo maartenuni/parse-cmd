@@ -16,6 +16,9 @@
  * Inc. , 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA 
  */
 
+#ifndef TERMINAL_UTILS_H
+#define TERMINAL_UTILS_H
+
 /**
  * \internal
  * \file terminal_utils.h
@@ -32,3 +35,5 @@
  *          a default of 80 is assumed.
  */
 int get_terminal_width();
+
+#endif
