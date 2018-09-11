@@ -45,9 +45,16 @@
  */
 struct option_context {
     const char*     program_name;       ///< Stores the name of the program.
-    cmd_option**    options;            ///< The options specified.
-    const char**    args;               ///< The arguments specified.
-    int             n_options;          ///< Number of options specified.
+    const char*     program_description;///< A description of the program.
+    cmd_option**    options;            ///< The options specified by the user
+                                        //   on the command line.
+    const cmd_option* predef_options;   ///< The predefined options that
+                                        //   the program accepts.
+    int             n_predef_options;   ///< number of predefined options
+    const char**    args;               ///< The arguments specified on the
+                                        //   command line
+    int             n_options;          ///< Number of options specified
+                                        //   on the command line.
     int             options_capacity;   ///< Capacity of options storage.
     int             n_args;             ///< Number of arguments specified.
     int             arguments_capacity; ///< Capacity of the arguments.
@@ -314,7 +321,7 @@ int options_parse(option_context**  ppoptions,
                   int               argc,
                   const char* const* argv,
                   cmd_option*       predef_opts,
-                  unsigned          n_args
+                  unsigned          n_opts
                   )
 {
     int i, n, ret =  OPTION_OK;
@@ -343,6 +350,8 @@ int options_parse(option_context**  ppoptions,
     memset(options, 0, sizeof(option_context));
 
     options_add_name(options, argv[0]);
+    options->predef_options  = predef_opts;
+    options->n_predef_options= n_opts;
 
     for (i = 1; i < argc; i++) {
 
@@ -356,7 +365,7 @@ int options_parse(option_context**  ppoptions,
         if (is_long_opt(argv[i]) && long_opt_contains_value(argv[i])) {
             const char* opt = argv[i];
             opt += 2; // skip leading "--"
-            n = find_long_option(opt, predef_opts, n_args);
+            n = find_long_option(opt, predef_opts, n_opts);
             if (n < 0) {
                 fprintf(stderr, "Unknown option \"%s\"\n", argv[i]);
                 ret = OPTION_UNKNOWN;
@@ -377,7 +386,7 @@ int options_parse(option_context**  ppoptions,
             else
                 opt_value = NULL;
 
-            n = find_long_option(opt_start, predef_opts, n_args);
+            n = find_long_option(opt_start, predef_opts, n_opts);
             if (n < 0) {
                 fprintf(stderr, "Unknown option \"%s\"", argv[i]);
                 ret = OPTION_UNKNOWN;
@@ -398,7 +407,7 @@ int options_parse(option_context**  ppoptions,
             const char* opt_start = argv[i] + 1;
             while (*opt_start != '\0' && *opt_start != '=') {
                 char c = *opt_start;
-                n = find_short_option(c, predef_opts, n_args);
+                n = find_short_option(c, predef_opts, n_opts);
                 if (n < 0) {
                     fprintf(stderr, "Unknown option -%c\n", c);
                     ret = OPTION_UNKNOWN;
@@ -565,6 +574,29 @@ int option_context_nargs(const option_context* context)
     return context->n_args;
 }
 
+int option_context_num_options(const option_context* context)
+{
+    assert(context);
+    if (!context)
+        return -1;
+    return context->n_options;
+}
+
+int option_context_num_predef_options(const option_context* context)
+{
+    if (!context)
+        return -1;
+    return context->n_predef_options;
+}
+
+const cmd_option*
+option_context_get_predef_options(const option_context* options)
+{
+    if (!options)
+        return NULL;
+    return options->predef_options;
+}
+
 const char*
 option_context_get_argument(const option_context* context, int nth)
 {
@@ -575,4 +607,27 @@ option_context_get_argument(const option_context* context, int nth)
     return context->args[nth];
 }
 
+const char*
+option_context_get_description(const option_context* options)
+{
+    if (!options)
+        return NULL;
+    return options->program_description;
+}
 
+void
+option_context_set_description(
+        option_context* options,
+        const char* description
+        )
+{
+    if (options)
+        options->program_description = description;
+}
+
+const char* option_context_prog_name(const option_context* context)
+{
+    if (!context)
+        return NULL;
+    return context->program_name;
+}

@@ -51,7 +51,8 @@ enum OPTION_RET_VAL {
     OPTION_PARSE_ERROR,      ///< Unable to parse the command line arguments
     OPTION_INVALID_ARGUMENT, ///< An invalid argument to a function was specified.
     OPTION_UNKNOWN,          ///< An unknown option encountered.
-    OPTION_NOT_SPECIFIED     ///< asking for the value of a unspecified option.
+    OPTION_NOT_SPECIFIED,    ///< asking for the value of a unspecified option.
+    OPTION_INVALID_ENCODING  ///< Encountered text which wasn't encoded validly.
 };
 
 /**
@@ -74,6 +75,7 @@ typedef struct cmd_option {
     int             option_type;///< This determines how the option
                                 //  argument should be interpreted.
     option_value    value;      ///< The actual value specified.
+    const char*     help;       ///< Describes the option.
 } cmd_option;
 
 /// typedef for struct option_context
@@ -121,8 +123,7 @@ option_context_free(option_context* options);
  * \returns A pointer to the option or NULL if it wasn't found.
  */
 PARSE_CMD_EXPORT cmd_option*
-option_context_find_option(option_context* option,
-                                       const char* name);
+option_context_find_option(option_context* option, const char* name);
 
 /**
  * Returns whether a option was specified at the command line.
@@ -193,9 +194,34 @@ option_context_float_value(
 /**
  * Get the number of non option arguments
  */
-
 PARSE_CMD_EXPORT int
 option_context_nargs(const option_context* options);
+
+/**
+ * Get the number of options that are specified on the command line
+ *
+ * @param [in] options The parsed option context.
+ * 
+ * @returns the number of defined/applicable options. Or -1
+ *          when options == NULL
+ */
+PARSE_CMD_EXPORT int
+option_context_num_options(const option_context* options);
+
+/**
+ * Get the number of program defined options.
+ *
+ * @param [in] options The option context as returned by options_parse
+ * @returns The number of program predefined options.
+ */
+PARSE_CMD_EXPORT int
+option_context_num_predef_options(const option_context* options);
+
+/**
+ * Obtain a pointer to the predefined options
+ */
+PARSE_CMD_EXPORT const cmd_option*
+option_context_get_predef_options(const option_context* options);
 
 /**
  * Get the nth argument that was specified.
@@ -203,11 +229,63 @@ option_context_nargs(const option_context* options);
  * @param [in] options an initialized option context
  * @param [in] nth retrieve the nth_argument
  *
- * \Returns a pointer to an argument or NULL when it is not available.
+ * \returns a pointer to an argument or NULL when it is not available.
  */
 PARSE_CMD_EXPORT const char*
 option_context_get_argument(const option_context* options, int nth);
 
+/**
+ * Retrieve the program name
+ *
+ * @param [in]  options the parsed option context.
+ *
+ * @returns The name of the program.
+ */
+PARSE_CMD_EXPORT const char* 
+option_context_prog_name(const option_context* options);
+
+/**
+ * Set the program description
+ *
+ * The program description will be used when generating the help from the
+ * input options.
+ */
+PARSE_CMD_EXPORT void
+option_context_set_description(option_context* options,
+                               const char* description);
+
+/**
+ * Obtains the program description
+ */
+PARSE_CMD_EXPORT const char*
+option_context_get_description(const option_context* options);
+
+/**
+ * Get a short help for the that describes the options that can be given
+ * to the program.
+ *
+ * @param [in]  options the option context to describe
+ * @param [out] help a pointer to a char* that should be NULL, if successful
+ *              a string describing the help should be return to *help. This
+ *              string is owned by the caller and hence should be freed after
+ *              use.
+ * @return      OPTION_OK if successful another OPTION_x when not.
+ */
+PARSE_CMD_EXPORT int
+option_context_short_help(const option_context* options, char** help);
+
+/**
+ * Get a long help for the that describes the program.
+ *
+ * @param [in]  options  the option context to describe
+ * @param [out] help  a pointer to a char* that should be NULL, if successful
+ *              a string describing the help should be return to *help. This
+ *              string is owned by the caller and hence should be freed after
+ *              use.
+ * @return      OPTION_OK if successful another OPTION_x when not.
+ */
+PARSE_CMD_EXPORT int
+option_context_help(const option_context* options, char**help);
 
 #ifdef __cplusplus
 }
