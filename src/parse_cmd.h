@@ -98,7 +98,7 @@ typedef struct option_context option_context;
  *                        about and what type of options there are.
  *                        It is possible to specify a default value
  *                        for the option values here.
- * \param [in]    nargs   The number of predefined options.
+ * \param [in]    nopts   The number of predefined options.
  *
  * \returns OPTION_OK when successful.
  */
@@ -108,7 +108,7 @@ options_parse(
         int argc,
         const char* const* argv,
         cmd_option* predef_opts,
-        unsigned nargs
+        unsigned nopts
         );
 
 /**
