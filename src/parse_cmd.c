@@ -388,7 +388,7 @@ int options_parse(option_context**  ppoptions,
 
             n = find_long_option(opt_start, predef_opts, n_opts);
             if (n < 0) {
-                fprintf(stderr, "Unknown option \"%s\"", argv[i]);
+                fprintf(stderr, "Unknown option \"%s\"\n", argv[i]);
                 ret = OPTION_UNKNOWN;
                 break;
             }
