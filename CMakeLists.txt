@@ -44,12 +44,13 @@ set (PARSE_CMD_STATIC_LIB
         )
 
 #Check for expected headers
-CHECK_INCLUDE_FILES(stdlib.h HAVE_STDLIB_H)
-CHECK_INCLUDE_FILES(string.h HAVE_STRING_H)
-CHECK_INCLUDE_FILES(assert.h HAVE_ASSERT_H)
-CHECK_INCLUDE_FILES(stdio.h  HAVE_STDIO_H)
-CHECK_INCLUDE_FILES(unistd.h  HAVE_UNISTD_H)
-CHECK_INCLUDE_FILES("sys/ioctl.h"  HAVE_SYS_IOCTL_H)
+CHECK_INCLUDE_FILES(stdlib.h        HAVE_STDLIB_H)
+CHECK_INCLUDE_FILES(string.h        HAVE_STRING_H)
+CHECK_INCLUDE_FILES(assert.h        HAVE_ASSERT_H)
+CHECK_INCLUDE_FILES(stdio.h         HAVE_STDIO_H)
+CHECK_INCLUDE_FILES(wchar.h         HAVE_WCHAR_H)
+CHECK_INCLUDE_FILES(unistd.h        HAVE_UNISTD_H)
+CHECK_INCLUDE_FILES("sys/ioctl.h"   HAVE_SYS_IOCTL_H)
 
 #check for whether we have certain functios
 check_function_exists(ioctl HAVE_IOCTL)

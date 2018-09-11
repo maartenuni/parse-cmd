@@ -31,12 +31,14 @@ set (PARSE_CMD_SOURCES
     parse_cmd_help.c
     terminal_utils.c
     text_buffer.c
+    string_utils.c
     )
 
 set (PARSE_CMD_HEADERS
     parse_cmd.h
     terminal_utils.h
     text_buffer.h
+    string_utils.h
     )
 
 add_library(${PARSE_CMD_SHARED_LIB}

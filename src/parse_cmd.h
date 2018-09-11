@@ -51,7 +51,8 @@ enum OPTION_RET_VAL {
     OPTION_PARSE_ERROR,      ///< Unable to parse the command line arguments
     OPTION_INVALID_ARGUMENT, ///< An invalid argument to a function was specified.
     OPTION_UNKNOWN,          ///< An unknown option encountered.
-    OPTION_NOT_SPECIFIED     ///< asking for the value of a unspecified option.
+    OPTION_NOT_SPECIFIED,    ///< asking for the value of a unspecified option.
+    OPTION_INVALID_ENCODING  ///< Encountered text which wasn't encoded validly.
 };
 
 /**
@@ -268,6 +269,7 @@ option_context_get_description(const option_context* options);
  *              a string describing the help should be return to *help. This
  *              string is owned by the caller and hence should be freed after
  *              use.
+ * @return      OPTION_OK if successful another OPTION_x when not.
  */
 PARSE_CMD_EXPORT int
 option_context_short_help(const option_context* options, char** help);

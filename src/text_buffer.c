@@ -21,9 +21,18 @@
  */
 
 
+#include "parse_cmd_config.h"
 #include <string.h>
 #include <assert.h>
+
+#if defined(HAVE_WCHAR_H)
+#include <wchar.h>
+#else
+#pragma message ("wchar.h is required")
+#endif
+
 #include "text_buffer.h"
+
 
 int
 text_buffer_init(text_buffer_ptr buf, size_t desired_capacity)
@@ -35,7 +44,7 @@ text_buffer_init(text_buffer_ptr buf, size_t desired_capacity)
         desired_capacity = 2;
     
     buf->buffer = calloc(desired_capacity, sizeof(char));
-    buf->size = 0;
+    buf->size   = 0;
     buf->capacity = desired_capacity;
 
     return buf->buffer != 0 ? 0 : -2;
@@ -104,6 +113,13 @@ text_buffer_shrink(text_buffer_ptr buf, size_t size)
     return 0;
 }
 
+void
+text_buffer_clear(text_buffer_ptr buf)
+{
+    buf->size = 0;
+    buf->buffer[0] = '\0';
+}
+
 int
 text_buffer_shrink_to_size(text_buffer_ptr buf)
 {
@@ -120,3 +136,4 @@ text_buffer_shrink_to_size(text_buffer_ptr buf)
     }
     return 0;
 }
+

@@ -23,6 +23,7 @@
 #cmakedefine HAVE_STDLIB_H
 #cmakedefine HAVE_ASSERT_H
 #cmakedefine HAVE_STRING_H
+#cmakedefine HAVE_WCHAR_H
 #cmakedefine HAVE_UNISTD_H
 #cmakedefine HAVE_SYS_IOCTL_H
 
