@@ -38,10 +38,9 @@
  *
  * Line header is the number of spaces to insert when a piece of text
  * wraps around when the maximum line length is encountered.
- *
- * \notice doxygen collapses multiple spaces int the html output
- * so the definition is const char* LINE_HEADER = "........"
- * where each. Is actually a space.
+ * NOTE: doxygen collapses multiple spaces in the HTML output
+ * so the definition is:
+ * \code{.c} const char* LINE_HEADER = "        "; \endcode
  */
 const char* LINE_HEADER = "        ";
 
