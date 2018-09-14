@@ -63,9 +63,11 @@ struct option_context {
 
 void option_context_free(option_context* context)
 {
-    free(context->options);
-    free(context->args);
-    free(context);
+    if (context) {
+        free(context->options);
+        free(context->args);
+        free(context);
+    }
 }
 
 /*
