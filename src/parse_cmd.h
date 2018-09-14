@@ -123,7 +123,10 @@ option_context_free(option_context* options);
  * \returns A pointer to the option or NULL if it wasn't found.
  */
 PARSE_CMD_EXPORT cmd_option*
-option_context_find_option(option_context* option, const char* name);
+option_context_find_option(
+           const option_context*    option,
+           const char*              name
+           );
 
 /**
  * Returns whether a option was specified at the command line.
@@ -135,8 +138,8 @@ option_context_find_option(option_context* option, const char* name);
  */
 PARSE_CMD_EXPORT int
 option_context_have_option(
-        option_context* options,
-        const char*     name
+        const option_context*   options,
+        const char*             name
         );
 
 /**
@@ -151,9 +154,9 @@ option_context_have_option(
  */
 PARSE_CMD_EXPORT int
 option_context_str_value(
-        option_context* options,
-        const char*     opt_name,
-        const char**    opt_value
+        const option_context*   options,
+        const char*             opt_name,
+        const char**            opt_value
         );
 
 /**
@@ -168,9 +171,9 @@ option_context_str_value(
  */
 PARSE_CMD_EXPORT int
 option_context_int_value(
-        option_context* options,
-        const char*     opt_name,
-        int*            opt_value
+        const option_context*   options,
+        const char*             opt_name,
+        int*                    opt_value
         );
 
 /**
@@ -186,9 +189,9 @@ option_context_int_value(
  */
 PARSE_CMD_EXPORT int
 option_context_float_value(
-        option_context* options,
-        const char*     opt_name,
-        double*         opt_value
+        const option_context*   options,
+        const char*             opt_name,
+        double*                 opt_value
         );
 
 /**

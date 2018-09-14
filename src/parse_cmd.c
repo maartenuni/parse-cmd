@@ -473,10 +473,11 @@ int options_parse(option_context**  ppoptions,
 }
 
 
-int option_context_str_value(
-        option_context* context,
-        const char*     name,
-        const char**    value
+int
+option_context_str_value(
+        const option_context*   context,
+        const char*             name,
+        const char**            value
         )
 {
     cmd_option* option;
@@ -498,10 +499,12 @@ int option_context_str_value(
     return OPTION_OK;
 }
 
-int option_context_int_value(option_context* context,
-                             const char*     name,
-                             int*            value
-                             )
+int
+option_context_int_value(
+        const option_context*  context,
+        const char*            name,
+        int*                   value
+        )
 {
     cmd_option* option;
     assert(context && name && value);
@@ -522,10 +525,12 @@ int option_context_int_value(option_context* context,
     return OPTION_OK;
 }
 
-int option_context_float_value(option_context* context,
-                               const char*     name,
-                               double*         value
-                               )
+int
+option_context_float_value(
+        const option_context*   context,
+        const char*             name,
+        double*                 value
+        )
 {
     cmd_option* option;
     assert(context && name && value);
@@ -546,7 +551,8 @@ int option_context_float_value(option_context* context,
     return OPTION_OK;
 }
 
-cmd_option* option_context_find_option(option_context* context, const char* name)
+cmd_option*
+option_context_find_option(const option_context* context, const char* name)
 {
     int i, ret = -1;
     for (i = 0; i < context->n_options; i++) {
@@ -561,8 +567,8 @@ cmd_option* option_context_find_option(option_context* context, const char* name
         return NULL;
 }
 
-int option_context_have_option(option_context* context,
-                               const char* name)
+int
+option_context_have_option(const option_context* context, const char* name)
 {
     assert(context && name);
     return option_context_find_option(context, name) != NULL;
